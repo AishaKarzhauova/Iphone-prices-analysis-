@@ -40,10 +40,16 @@ class ParserOLX:
     def _parse_location(self, ad):
         location_element = ad.find("p", {"data-testid": "location-date"})
         if location_element:
-            location_text = location_element.text.strip().split(",")
-            if len(location_text) > 0:
-                city = location_text[0].strip()
-                district = location_text[1].strip() if len(location_text) > 1 else ""
+            # Split the text into location and possible date
+            location_text = location_element.text.strip()
+            if " - " in location_text:
+                parts = location_text.split(" - ")
+                city = parts[0].split(",")[0].strip()
+                district = parts[0].split(",")[1].strip() if "," in parts[0] else ""
+                return city, district
+            else:
+                city = location_text.split(",")[0].strip()
+                district = location_text.split(",")[1].strip() if "," in location_text else ""
                 return city, district
         return "Unknown", "Unknown"
 
@@ -110,7 +116,7 @@ class ParserOLX:
 
 # Example usage
 URL = 'https://www.olx.kz/q-iphone/'
-output_file = 'olx_iphone6.csv'
+output_file = 'olx_iphone.csv'
 
 olx_parser = ParserOLX()
 df = olx_parser.scrape_and_save_to_csv(URL, output_file)
