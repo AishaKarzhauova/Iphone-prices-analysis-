@@ -114,9 +114,9 @@ class ParserOLX:
         return df
 
 
-# Example usage
+
 URL = 'https://www.olx.kz/q-iphone/'
-output_file = 'olx_iphone.csv'
+output_file = 'olx_iphone2.csv'
 
 olx_parser = ParserOLX()
 df = olx_parser.scrape_and_save_to_csv(URL, output_file)
